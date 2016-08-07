@@ -20,6 +20,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 
+import java.util.UUID;
+
 /**
  *
  * @author jb
@@ -41,7 +43,35 @@ public class WorldCoordinate
     
     static public Location toLocation(final String worldCoordinate)
     {
+        // Made >= edit to allow piggy back of other method.
         final String split[] = worldCoordinate.split(",");
-        return split.length == 4 ? new Location(Bukkit.getWorld(split[0]), Double.valueOf(split[1]), Double.valueOf(split[2]),  Double.valueOf(split[3])) : null;
+        return split.length >= 4 ? new Location(Bukkit.getWorld(UUID.fromString(split[0])),
+                Double.valueOf(split[1]), Double.valueOf(split[2]),  Double.valueOf(split[3])) : null;
+    }
+
+    /**
+     * Special SB ID, just location and team name.
+     * @param teamName Owner of SB.
+     * @param location Location of SB.
+     * @return String ID of the SB.
+     */
+    static public String toStringLocID(final String teamName, final Block location) {
+        final StringBuilder stb = new StringBuilder();
+
+        stb.append(WorldCoordinate.toString(location));
+        stb.append(",");
+        stb.append(teamName);
+
+        return stb.toString();
+    }
+
+    /**
+     * Quick getter for the team name from the SB ID.
+     * @param ID SB ID.
+     * @return Name of team SB belongs to.
+     */
+    static public String toTeamName(final String ID) {
+        final String split[] = ID.split(",");
+        return split.length == 5 ? split[4] : null;
     }
 }

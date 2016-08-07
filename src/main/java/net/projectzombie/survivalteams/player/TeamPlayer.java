@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 import net.projectzombie.survivalteams.file.FileWrite;
+import net.projectzombie.survivalteams.file.buffers.BlockBuffer;
 import net.projectzombie.survivalteams.file.buffers.TeamBuffer;
 import net.projectzombie.survivalteams.file.FileRead;
 import static net.projectzombie.survivalteams.player.TPText.*;
@@ -27,6 +28,7 @@ import net.projectzombie.survivalteams.team.Team;
 import net.projectzombie.survivalteams.team.TeamRank;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
@@ -138,8 +140,12 @@ public class TeamPlayer
         if (isLeader())
         {
             if (FileWrite.removeTeam(team))
+            {
+                removeSpawnFlag(team.getSpawn());
+                BlockBuffer.removeTeamBlocks(team.getName());
                 for (TeamPlayer teamMembers : team.getPlayers())
                     teamMembers.disbandedFromTeam();
+            }
             else
                 player.sendMessage(FILE_ERROR);
         }
@@ -218,11 +224,17 @@ public class TeamPlayer
         final Location location = player.getEyeLocation();
         if (isLeader())
         {
-            if (isValidSpawnSet(location))
+            double distanceFromEnemy = BlockBuffer.getMinDistanceFromEnemyBase(player);
+            Bukkit.getPlayer("Gephery").sendMessage("" + distanceFromEnemy);
+            boolean noLandConflicts = distanceFromEnemy > (BlockBuffer.getBuildRadius() * 2);
+            if (isValidSpawnSet(location) && noLandConflicts)
             {
                 if (FileWrite.writeSpawn(team, location))
                 {
+                    TeamBuffer.getSpawns().remove(team.getSpawn());
+                    removeSpawnFlag(team.getSpawn());
                     team.setSpawn(location);
+                    BlockBuffer.removeTeamBlocksFar(team.getName());
                     for (TeamPlayer member : team.getPlayers())
                         member.getPlayer().sendMessage(NEW_SPAWN);
                 }
@@ -312,12 +324,14 @@ public class TeamPlayer
     
     public void teleportToBase()
     {
-        final Location spawn = team.getSpawn();
         if (hasTeam())
+        {
+            final Location spawn = team.getSpawn();
             if (team.validSpawn())
                 player.teleport(spawn);
             else
                 player.sendMessage(INVALID_BASE);
+        }
         else
             player.sendMessage(NO_TEAM);
     }
@@ -459,5 +473,11 @@ public class TeamPlayer
         return locBlock.isEmpty()
                 && locBlock.getRelative(0, -1, 0).isEmpty()
                 && !locBlock.getRelative(0, -2, 0).isEmpty();
+    }
+
+    private void removeSpawnFlag(final Location loc)
+    {
+        if (loc != null)
+            loc.getBlock().getRelative(0, -1, 0).setType(Material.AIR);
     }
 }

@@ -6,9 +6,11 @@
 package net.projectzombie.survivalteams.file.buffers;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.UUID;
 import net.projectzombie.survivalteams.player.TeamPlayer;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 /**
@@ -17,7 +19,6 @@ import org.bukkit.entity.Player;
  */
 public class PlayerBuffer
 {
-
     private static final HashMap<UUID, TeamPlayer> ONLINE_PLAYERS   = new HashMap<>();
     
     private PlayerBuffer() { /* Do not use. */ }
@@ -35,7 +36,7 @@ public class PlayerBuffer
     public static TeamPlayer get(final UUID uuid)
     {
         final TeamPlayer tp = ONLINE_PLAYERS.get(uuid);
-        return tp.isOnline() ? tp : null;
+        return tp != null && tp.isOnline() ? tp : null;
     }
     
     public static boolean contains(final UUID uuid)

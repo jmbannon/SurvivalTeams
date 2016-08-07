@@ -19,6 +19,8 @@ package net.projectzombie.survivalteams.file;
 import java.util.UUID;
 import net.projectzombie.survivalteams.player.TeamPlayer;
 import net.projectzombie.survivalteams.team.Team;
+import org.bukkit.Location;
+import org.bukkit.Material;
 
 /**
  *
@@ -27,8 +29,109 @@ import net.projectzombie.survivalteams.team.Team;
 public class FilePath
 {
     private static final String ROOT_PATH      = "teams";
+    private static final String ROOT_BLOCKS    = "blocks";
     
     private FilePath() { /* Do nothing */ }
+
+    static protected String hitToolDurability(Material material)
+    {
+        return hitTool(material) + ".durability";
+    }
+
+    static protected String hitTools()
+    {
+        return ROOT_BLOCKS + ".weapons";
+    }
+
+    static protected String hitTool(Material material)
+    {
+        return hitTools() + "." + material.toString();
+    }
+
+    static protected String hitToolHitPoints(Material material)
+    {
+        return hitTool(material) + ".health";
+    }
+
+    static protected String teamBlockCheckerTool()
+    {
+        return ROOT_BLOCKS + ".tool";
+    }
+
+    static protected String buildRadius()
+    {
+        return ROOT_BLOCKS + ".build-R";
+    }
+
+    static protected String hitToolDefaultHitPoints()
+    {
+        return ROOT_BLOCKS + ".hitPoints-D";
+    }
+
+    static protected String hitToolDefaultDurability()
+    {
+        return ROOT_BLOCKS + ".durability-D";
+    }
+
+    static protected String breakNaturally()
+    {
+        return ROOT_BLOCKS + ".break-N";
+    }
+
+    static protected String attackDelay()
+    {
+        return ROOT_BLOCKS + ".delay";
+    }
+
+    static protected String survivalBlocks()
+    {
+        return ROOT_BLOCKS + ".defaults";
+    }
+
+    static protected String survivalBlock(String material)
+    {
+        return survivalBlocks() + "." + material;
+    }
+
+    static protected String survivalBlockHealth(String material)
+    {
+        return survivalBlock(material) + ".health";
+    }
+
+    static protected String teamBlocks()
+    {
+        return ROOT_BLOCKS + ".team";
+    }
+
+    static protected String teamBlock(String teamName, Location loc)
+    {
+        return teamBlock(WorldCoordinate.toStringLocID(teamName, loc.getBlock()));
+    }
+
+    static protected String teamBlock(String ID)
+    {
+        return teamBlocks() + "." + ID;
+    }
+
+    static protected String teamBlockHealth(String ID)
+    {
+        return teamBlock(ID) + ".health";
+    }
+
+    static protected String teamBlock(Team team, Location loc)
+    {
+        return teamBlock(team.getName(), loc);
+    }
+
+    static protected String teamBlockHealth(String teamName, Location loc)
+    {
+        return teamBlock(teamName, loc) + ".health";
+    }
+
+    static protected String teamBlockHealth(Team team, Location loc)
+    {
+        return teamBlockHealth(team.getName(), loc);
+    }
 
     static protected String teams()
     {

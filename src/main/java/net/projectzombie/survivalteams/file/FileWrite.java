@@ -5,9 +5,9 @@
  */
 package net.projectzombie.survivalteams.file;
 
+import net.projectzombie.survivalteams.block.TeamBlock;
 import net.projectzombie.survivalteams.file.buffers.TeamBuffer;
 import static net.projectzombie.survivalteams.file.FileContents.*;
-import static net.projectzombie.survivalteams.file.FilePath.*;
 import net.projectzombie.survivalteams.file.buffers.PlayerBuffer;
 import net.projectzombie.survivalteams.player.TeamPlayer;
 import net.projectzombie.survivalteams.team.Team;
@@ -29,6 +29,99 @@ public class FileWrite
     ////////////////////////////////////////////////////////////////////////////
     // Write functions
     //
+    public static boolean writeHitTool(Material material, int damage, int durability)
+    {
+        TEAM_YAML.set(FilePath.hitToolHitPoints(material), damage);
+        TEAM_YAML.set(FilePath.hitToolDurability(material), durability);
+        return saveConfig();
+    }
+
+    public static boolean wipeHitTool(Material material)
+    {
+        TEAM_YAML.set(FilePath.hitTool(material), null);
+        return saveConfig();
+    }
+
+    public static boolean writeDefaultHitToolDurability(int durability)
+    {
+        TEAM_YAML.set(FilePath.hitToolDefaultDurability(), durability);
+        return saveConfig();
+    }
+
+    public static boolean writeDefaultHitToolDamage(int damage)
+    {
+        TEAM_YAML.set(FilePath.hitToolDefaultHitPoints(), damage);
+        return saveConfig();
+    }
+
+    public static boolean writeTeamBlockCheckerTool(Material tool)
+    {
+        TEAM_YAML.set(FilePath.teamBlockCheckerTool(), tool.toString());
+        return saveConfig();
+    }
+
+    public static boolean writeBreakNaturally(boolean natural)
+    {
+        TEAM_YAML.set(FilePath.breakNaturally(), natural);
+        return saveConfig();
+    }
+
+    public static boolean writeAttackDelay(int delay)
+    {
+        TEAM_YAML.set(FilePath.attackDelay(), delay);
+        return saveConfig();
+    }
+
+    public static boolean writeTeamBlockHealth(final String teamName, final Location loc, final int health)
+    {
+        TEAM_YAML.set(FilePath.teamBlockHealth(teamName, loc), health);
+        return saveConfig();
+    }
+
+    public static boolean writeDefaultBuildRadius(final int buildRadius)
+    {
+        TEAM_YAML.set(FilePath.buildRadius(), buildRadius);
+        return saveConfig();
+    }
+
+    public static boolean writeSurvivalBlockHealth(final String material, final int health)
+    {
+        TEAM_YAML.set(FilePath.survivalBlockHealth(material), health);
+        return saveConfig();
+    }
+
+    /**
+     * Used for destroying block for disc.
+     * @param material
+     * @return
+     */
+    public static boolean wipeSurvivalBlock(final Material material)
+    {
+        TEAM_YAML.set(FilePath.survivalBlock(material.toString()), null);
+        return saveConfig();
+    }
+
+    /**
+     * Used for destroying block from disc.
+     * @param ID
+     * @return
+     */
+    public static boolean wipeTeamBlock(String ID)
+    {
+        TEAM_YAML.set(FilePath.teamBlock(ID), null);
+        return saveConfig();
+    }
+
+    public static boolean wipeTeamBlocks()
+    {
+        TEAM_YAML.set(FilePath.teamBlocks(), null);
+        return saveConfig();
+    }
+
+    public static boolean writeTeamBlockHealth(final TeamBlock sB) {
+        return writeTeamBlockHealth(sB.getTeamName(), sB.getLocation(), sB.getHealth());
+    }
+
     public static boolean writeTeam(final TeamPlayer creator, final Team team)
     {
         final String teamName = team.getName();

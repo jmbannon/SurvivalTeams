@@ -18,7 +18,6 @@ package net.projectzombie.survivalteams.team;
 
 import java.util.ArrayList;
 import java.util.UUID;
-import net.projectzombie.survivalteams.file.FilePath;
 import net.projectzombie.survivalteams.file.FileWrite;
 import net.projectzombie.survivalteams.file.buffers.PlayerBuffer;
 import net.projectzombie.survivalteams.player.TPText;
@@ -133,7 +132,14 @@ public class Team implements Comparable<Team>
     {
         if (teamSpawn != null)
         {
-            final Block spawnBlock = teamSpawn.getBlock();
+            final Block spawnBlock;
+            try
+            {
+                spawnBlock = teamSpawn.getBlock();
+            } catch (NullPointerException e)
+            {
+                return false;
+            }
             return teamSpawn != null
                     && spawnBlock.isEmpty()
                     && spawnBlock.getRelative(0, -1, 0).getType().equals(Material.STANDING_BANNER)
