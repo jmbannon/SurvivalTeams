@@ -1,0 +1,8 @@
+name: SurvivalTeams
+main: net.projectzombie.survivalteams.main.Main
+depend: [ConsistentChatAPI]
+version: 1.0
+commands:
+  party:
+    description: Nope.
+    usage: "WIP"
