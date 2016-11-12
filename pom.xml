@@ -22,10 +22,6 @@
 
     <repositories>
         <repository>
-            <id>net.projectzombie</id>
-            <url>https://github.com/jmbannon/Project-Zombie.git</url>
-        </repository>
-        <repository>
             <id>sk89q-repo-wg</id>
             <url>http://maven.sk89q.com/artifactory/repo/com/sk89q/worldguard/</url>
         </repository>
@@ -59,6 +55,8 @@
             <groupId>net.projectzombie</groupId>
             <artifactId>ConsistentChatAPI</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/../ConsistentChatApi/target/ConsistentChatAPI-1.0-SNAPSHOT.jar</systemPath>
         </dependency>
     </dependencies>
 </project>
